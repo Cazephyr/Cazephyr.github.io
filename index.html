@@ -4,6 +4,33 @@
 <meta charset="utf-8">
 <title>ss</title>
 
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;  /* 水平居中 */
+    align-items: center;      /* 垂直居中 */
+    text-align: center;       /* %X */
+    font-family: Arial, sans-serif;
+}
+
+.container h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.container p {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.container a {
+    font-size: 20px;
+    color: blue;
+}
+</style>
+
 <script>
 function isWeChat() {
     return /MicroMessenger/i.test(navigator.userAgent);
@@ -12,7 +39,7 @@ function isWeChat() {
 window.onload = function() {
 
     if (isWeChat()) {
-        alert("检测到微信内置浏览器，请点击右上角 → 在浏览器打开");
+        alert("如果被重定向，请点击右上角 → 在浏览器打开");
     } else {
         window.location.replace("https://zephyr.qzz.io/");
     }
@@ -24,10 +51,11 @@ window.onload = function() {
 
 <body>
 
-<h2>不知道写什么</h2>
-<p>如果没有自动跳转，请点击下面链接</p>
-
-<a href="https://zephyr.qzz.io/">这里</a>
+<div class="container">
+    <h2>不知道写什么</h2>
+    <p>如果没有自动跳转，请点击下面</p>
+    <a href="https://zephyr.qzz.io/">这里</a>
+</div>
 
 </body>
 </html>
