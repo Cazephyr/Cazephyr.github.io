@@ -2,49 +2,73 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>ss</title>
+<title>欢迎</title>
 
 <style>
 body {
     margin: 0;
     height: 100vh;
     display: flex;
-    justify-content: center;  /* 水平居中 */
-    align-items: center;      /* 垂直居中 */
-    text-align: center;       /* %X */
+    justify-content: center;
+    align-items: center;
+    background: #f5f6fa;
     font-family: Arial, sans-serif;
 }
 
-.container h2 {
-    font-size: 40px;
-    margin-bottom: 20px;
+.container {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
 }
 
-.container p {
-    font-size: 20px;
+h2 {
+    font-size: 32px;
     margin-bottom: 15px;
 }
 
-.container a {
-    font-size: 20px;
-    color: blue;
+p {
+    font-size: 18px;
+    color: #666;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 28px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+.tip {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #999;
 }
 </style>
 
 <script>
-function isWeChat() {
-    return /MicroMessenger/i.test(navigator.userAgent);
+function isWxOrQQ() {
+    return /MicroMessenger|QQ/i.test(navigator.userAgent);
 }
 
 window.onload = function() {
-
-    if (isWeChat()) {
-        alert("如果被重定向，请点击右上角 → 在浏览器打开");
-    } else {
-        window.location.replace("https://zephyr.qzz.io/");
+    if (isWxOrQQ()) {
+        alert("如果被重定向,请点击右上角 → 在浏览器打开");
+    } /*else {
+        setTimeout(function() {
+            window.location.href = "https://zephyr.qzz.io/";
+        }, 1500);*/
     }
 
-}
 </script>
 
 </head>
@@ -52,9 +76,19 @@ window.onload = function() {
 <body>
 
 <div class="container">
-    <h2>不知道写什么</h2>
-    <p>如果没有自动跳转，请点击下面</p>
-    <a href="https://zephyr.qzz.io/">这里</a>
+    <h2>欢迎</h2>
+    <p>
+        不 挑 战<br>
+        怕 战 胜<br>
+        困 困 困<br>
+        难 难 难
+    </p>
+    
+    <a class="btn" href="https://zephyr.qzz.io/">这里</a>
+
+    <div id="tip" class="tip">
+        如果被重定向，请点击右上角 → 在浏览器打开
+    </div>
 </div>
 
 </body>
