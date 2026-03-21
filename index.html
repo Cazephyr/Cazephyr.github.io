@@ -125,101 +125,125 @@
     </div>
 
     <script>
-        //检查
-        function isWxOrQQ() {
-            const ua = navigator.userAgent.toLowerCase();
-            return /micromessenger/.test(ua) || /qq\//.test(ua);
+        // 跳转
+function isWxOrQQ() {
+    const ua = navigator.userAgent.toLowerCase();
+    return /micromessenger/.test(ua) || /qq\//.test(ua);
+}
+
+window.onload = function() {
+    if (isWxOrQQ()) {
+        alert("如果被重定向，请点击右上角 → 在浏览器打开");
+    }
+    startTyping();
+};
+
+// 2. 兼容 PC/手机
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const mouse = { x: null, y: null, active: false };
+
+// --- 交互事件监听 ---
+
+// 鼠标事件
+window.addEventListener('mousemove', (e) => { 
+    mouse.x = e.x; 
+    mouse.y = e.y; 
+    mouse.active = true; 
+});
+window.addEventListener('mouseleave', () => { mouse.active = false; });
+
+// 触摸事件 (适配手机)
+window.addEventListener('touchstart', (e) => {
+    mouse.active = true;
+    mouse.x = e.touches[0].clientX;
+    mouse.y = e.touches[0].clientY;
+}, { passive: false });
+
+window.addEventListener('touchmove', (e) => {
+    // 阻止手机滑动手势导致的页面滚动，专注粒子互动
+    if (e.target.tagName !== 'A') { // 如果不是点击按钮，就阻止滚动
+        e.preventDefault();
+    }
+    mouse.x = e.touches[0].clientX;
+    mouse.y = e.touches[0].clientY;
+}, { passive: false });
+
+window.addEventListener('touchend', () => { mouse.active = false; });
+
+window.addEventListener('resize', init);
+
+class Particle {
+    constructor() {
+        this.init();
+    }
+    init() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.vx = (Math.random() - 0.5) * 1.2;
+        this.vy = (Math.random() - 0.5) * 1.2;
+    }
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+        if (mouse.active) {
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 200) { // 汇聚半径
+                this.x += dx * 0.05; // 汇聚速度
+                this.y += dy * 0.05;
+            }
         }
+    }
+    draw() {
+        ctx.fillStyle = 'rgba(110, 142, 251, 0.45)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
 
-        window.onload = function() {
-            if (isWxOrQQ()) {
-                alert("您的账号已在异地登录，若不是本人，请尽快更改密码");
-            }
-            startTyping(); 
-        };
+function init() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
 
-        //粒子
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const mouse = { x: null, y: null, active: false };
+    const count = window.innerWidth < 768 ? 60 : 120;
+    for (let i = 0; i < count; i++) particles.push(new Particle());
+}
 
-        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; mouse.active = true; });
-        window.addEventListener('mouseleave', () => { mouse.active = false; });
-        window.addEventListener('resize', init);
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+}
 
-        class Particle {
-            constructor() {
-                this.init();
-            }
-            init() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                //速度
-                this.vx = (Math.random() - 0.5) * 1.5;
-                this.vy = (Math.random() - 0.5) * 1.5;
-            }
-            update() {
-                // 基础自由移动
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // 边界反弹
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-
-                // 鼠标汇聚逻辑
-                if (mouse.active) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < 250) { // 吸引范围
-                        this.x += dx * 0.02; // 吸引强度
-                        this.y += dy * 0.02;
-                    }
-                }
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(110, 142, 251, 0.4)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+const quotes = [
+   "嗨👋，世界很大，欢迎您来到这一小角。"
+];
+function startTyping() {
+    const text = quotes[Math.floor(Math.random() * quotes.length)];
+    let i = 0;
+    const dom = document.getElementById('typing');
+    function type() {
+        if (i < text.length) {
+            dom.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, 120);
         }
+    }
+    type();
+}
 
-        function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < 120; i++) particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-
-        const quotes = [
-            "嗨👋，世界很大，欢迎您来到这一小角。"
-        ];
-        function startTyping() {
-            const text = quotes[Math.floor(Math.random() * quotes.length)];
-            let i = 0;
-            const dom = document.getElementById('typing');
-            function type() {
-                if (i < text.length) {
-                    dom.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, 120);
-                }
-            }
-            type();
-        }
-
-        init();
-        animate();
+init();
+animate();
     </script>
 </body>
 </html>
