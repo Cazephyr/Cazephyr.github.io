@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6e8efb 0%, #83b6f3 100%);
+            --glass: rgba(255, 255, 255, 0.75);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 1;
+        }
+
+        .header-tag {
+            position: absolute;
+            top: 20px; left: 20px;
+            padding: 8px 18px;
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            font-size: 13px;
+            color: #555;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 6px; height: 6px;
+            background: #52c41a;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(82, 196, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(82, 196, 26, 0); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            padding: 45px;
+            border-radius: 28px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 88%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: cardBreathe 4s ease-in-out infinite;
+        }
+
+        @keyframes cardBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .typing {
+            min-height: 50px;
+            margin: 20px 0 30px;
+            font-size: 17px;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            display: inline-block;
+            transition: 0.3s;
+            box-shadow: 0 8px 15px rgba(110, 142, 251, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(110, 142, 251, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="header-tag">
+        <div class="status-dot"></div>
+        <span> 请点击右上角 → 在浏览器打开</span>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h3 style="margin:0; color:#333;">Zephyr</h3>
+            <div class="typing" id="typing"></div>
+            <a href="https://zephyr.sbs" class="btn">这里</a>
+        </div>
+    </div>
+
+    <script>
+        // 1. 跳转逻辑与环境检查
+        function isWxOrQQ() {
+            const ua = navigator.userAgent.toLowerCase();
+            return /micromessenger/.test(ua) || /qq\//.test(ua);
+        }
+
+        window.onload = function() {
+            startTyping(); 
+
+            if (isWxOrQQ()) {
+                alert("请点击右上角 → 在浏览器打开");
+            } else {
+                setTimeout(() => {
+                    window.location.href = "https://zephyr.sbs";
+                }, 0);
+            }
+        };
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const mouse = { x: null, y: null, active: false };
+
+        window.addEventListener('mousemove', (e) => { 
+            mouse.x = e.clientX; 
+            mouse.y = e.clientY; 
+            mouse.active = true; 
+        });
+
+        window.addEventListener('mouseleave', () => { mouse.active = false; });
+
+        window.addEventListener('touchstart', (e) => {
+            mouse.active = true;
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }, { passive: false });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.target.tagName !== 'A') { 
+                e.preventDefault();
+            }
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }, { passive: false });
+
+        window.addEventListener('touchend', () => { mouse.active = false; });
+        window.addEventListener('resize', init);
+
+        class Particle {
+            constructor() {
+                this.init();
+            }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+                if (mouse.active) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (dist < 200) { 
+                        let speedFactor = dist < 40 ? 0.002 : 0.012; 
+                        this.x += dx * speedFactor; 
+                        this.y += dy * speedFactor;
+                    }
+                }
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(110, 142, 251, 0.6)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawLines() {
+            const maxDistance = 100; 
+            const mouseMaxDistance = 160; 
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < maxDistance) {
+                        let alpha = (1 - dist / maxDistance) * 0.25;
+                        ctx.strokeStyle = `rgba(110, 142, 251, ${alpha})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+
+                if (mouse.active) {
+                    let dx = mouse.x - particles[i].x;
+                    let dy = mouse.y - particles[i].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < mouseMaxDistance) {
+                        let alpha = (1 - dist / mouseMaxDistance) * 0.35;
+                        ctx.strokeStyle = `rgba(110, 142, 251, ${alpha})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const count = window.innerWidth < 768 ? 60 : 120;
+            for (let i = 0; i < count; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            drawLines(); 
+            requestAnimationFrame(animate);
+        }
+
+        const quotes = [
+           "嗨👋，世界很大，欢迎您来到这一小角。"
+        ];
+
+        function startTyping() {
+            const text = quotes[Math.floor(Math.random() * quotes.length)];
+            let i = 0;
+            const dom = document.getElementById('typing');
+            dom.innerHTML = ""; // 清空可能残留的内容
+            function type() {
+                if (i < text.length) {
+                    dom.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 120);
+                }
+            }
+            type();
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
