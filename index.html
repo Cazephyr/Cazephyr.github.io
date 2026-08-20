@@ -1,877 +1,1606 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="平台隐私保护协议 / Platform Privacy Policy">
-  <title>隐私政策 · Privacy Policy</title>
+  <title>Enterprise-Grade AI API Platform</title>
 
   <style>
-    :root {
-      --bg: #f6f8fb;
-      --card: rgba(255, 255, 255, 0.92);
-      --text: #172033;
-      --text-secondary: #667085;
-      --muted: #98a2b3;
-      --border: #e7ebf0;
-      --accent: #2563eb;
-      --accent-soft: #eff6ff;
-      --green: #16a34a;
-      --green-soft: #ecfdf3;
-      --shadow: 0 18px 50px rgba(15, 23, 42, 0.07);
-    }
-
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
     }
 
     body {
       font-family:
         -apple-system,
         BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
         "Segoe UI",
-        "PingFang SC",
-        "Microsoft YaHei",
+        Roboto,
+        Helvetica,
+        Arial,
         sans-serif;
+
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* =========================================================
+       BACKGROUND
+       ========================================================= */
+
+    .bg-light {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+
       background:
         radial-gradient(
-          circle at 50% -10%,
-          rgba(37, 99, 235, 0.07),
-          transparent 35%
-        ),
-        var(--bg);
-      color: var(--text);
-      line-height: 1.8;
-      -webkit-font-smoothing: antialiased;
+          circle at 100% 0%,
+          rgba(255,255,255,0.055) 0%,
+          rgba(255,255,255,0.025) 12%,
+          rgba(255,255,255,0.008) 26%,
+          transparent 42%
+        );
     }
 
-    /* 中英文切换样式 */
-    .en { display: none; }
-    .zh { display: inline; }
-    
-    body.en-mode .zh { display: none !important; }
-    body.en-mode .en { display: inline !important; }
+    .corner-glow {
+      position: absolute;
+      top: -90px;
+      right: -90px;
 
-    .lang-toggle-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border: 1px solid #dbeafe;
-      border-radius: 8px;
-      background: #eff6ff;
-      color: #2563eb;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-left: 16px;
-      font-family: inherit;
-    }
-    .lang-toggle-btn:hover {
-      background: #dbeafe;
-    }
+      width: 320px;
+      height: 320px;
 
-    /* 顶部导航 */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid rgba(231, 235, 240, 0.85);
-      background: rgba(255, 255, 255, 0.78);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(255,255,255,0.16) 0%,
+          rgba(255,255,255,0.10) 14%,
+          rgba(255,255,255,0.045) 30%,
+          rgba(255,255,255,0.015) 48%,
+          transparent 72%
+        );
+
+      filter: blur(28px);
+
+      animation:
+        cornerGlow 7s ease-in-out infinite;
+
+      will-change: transform, opacity;
     }
 
-    .topbar-inner {
-      width: min(1080px, calc(100% - 40px));
+    @keyframes cornerGlow {
+      0%, 100% {
+        opacity: 0.72;
+        transform: scale(0.96);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.04);
+      }
+    }
+
+    .light-streak {
+      width: 60vw;
+      height: 1.2px;
+
+      position: absolute;
+      left: 105vw;
+
+      transform: rotate(-45deg);
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent 0%,
+          transparent 20%,
+          rgba(255,255,255,0.04) 32%,
+          rgba(255,255,255,0.32) 43%,
+          rgba(255,255,255,0.92) 48%,
+          rgba(255,255,255,1) 50%,
+          rgba(255,255,255,0.92) 52%,
+          rgba(255,255,255,0.32) 57%,
+          rgba(255,255,255,0.04) 68%,
+          transparent 80%,
+          transparent 100%
+        );
+
+      opacity: 0;
+
+      filter: blur(0.25px);
+
+      animation:
+        lightSweep 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+
+      will-change: transform, opacity;
+    }
+
+    .light-streak::after {
+      content: "";
+
+      position: absolute;
+      left: 0;
+      top: 50%;
+
+      width: 100%;
+      height: 20px;
+
+      transform: translateY(-50%);
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent 0%,
+          transparent 25%,
+          rgba(255,255,255,0.015) 38%,
+          rgba(255,255,255,0.07) 47%,
+          rgba(255,255,255,0.12) 50%,
+          rgba(255,255,255,0.07) 53%,
+          rgba(255,255,255,0.015) 62%,
+          transparent 75%,
+          transparent 100%
+        );
+
+      filter: blur(7px);
+
+      opacity: 0.9;
+    }
+
+    @keyframes lightSweep {
+      0% {
+        transform: translate3d(0,0,0) rotate(-45deg);
+        opacity: 0;
+      }
+
+      8% {
+        opacity: 0.9;
+      }
+
+      22% {
+        opacity: 1;
+      }
+
+      42% {
+        opacity: 0.95;
+      }
+
+      58% {
+        opacity: 0.45;
+      }
+
+      70% {
+        opacity: 0;
+      }
+
+      100% {
+        transform: translate3d(-155vw,145vh,0) rotate(-45deg);
+        opacity: 0;
+      }
+    }
+
+    .light-streak:nth-of-type(1) { top: -15vh; animation-delay: 0s; }
+    .light-streak:nth-of-type(2) { top: -2vh; animation-delay: -1.2s; }
+    .light-streak:nth-of-type(3) { top: 12vh; animation-delay: -2.7s; }
+    .light-streak:nth-of-type(4) { top: 25vh; animation-delay: -4.1s; }
+    .light-streak:nth-of-type(5) { top: 38vh; animation-delay: -5.8s; }
+    .light-streak:nth-of-type(6) { top: 52vh; animation-delay: -7.3s; }
+    .light-streak:nth-of-type(7) { top: 65vh; animation-delay: -8.9s; }
+    .light-streak:nth-of-type(8) { top: 80vh; animation-delay: -10.5s; }
+    .light-streak:nth-of-type(9) { top: 92vh; animation-delay: -12.1s; }
+    .light-streak:nth-of-type(10) { top: 15vh; animation-delay: -13.8s; }
+    .light-streak:nth-of-type(11) { top: 45vh; animation-delay: -15.2s; }
+    .light-streak:nth-of-type(12) { top: 72vh; animation-delay: -17s; }
+
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 80px 40px 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 70px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-      font-weight: 650;
-      color: #172033;
-      text-decoration: none;
-      letter-spacing: -0.2px;
+    .left-content {
+      flex: 1;
+      max-width: 580px;
     }
 
-    .brand-icon {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      border-radius: 9px;
-      color: white;
-      font-size: 14px;
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 24px;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    h1 {
+      font-size: 48px;
       font-weight: 700;
-      background: linear-gradient(135deg, #2563eb, #60a5fa);
-      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.22);
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.5px;
     }
 
-    .topbar-label {
-      color: var(--text-secondary);
-      font-size: 13px;
+    .subtitle {
+      font-size: 18px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 20px;
+      font-weight: 500;
     }
 
-    /* 页面主体 */
-    .page {
-      width: min(900px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 76px 0 90px;
+    .description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 36px;
+      max-width: 520px;
     }
 
-    /* Hero */
-    .hero {
-      text-align: center;
-      margin-bottom: 48px;
+    .buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    .hero-badge {
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background: #f0f0f0;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+
+    /* =========================================================
+       PREMIUM AI PROVIDER SHOWCASE
+       ========================================================= */
+
+    .right-card {
+      position: relative;
+      flex-shrink: 0;
+      width: 430px;
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.025) 38%, rgba(10,10,12,0.92) 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.08);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      overflow: hidden;
+      animation: floatCard 7s ease-in-out infinite;
+      will-change: transform, box-shadow;
+    }
+
+    .right-card::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.035) 35%, transparent 70%);
+      filter: blur(18px);
+      pointer-events: none;
+    }
+
+    .right-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 12%;
+      width: 76%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.38), transparent);
+      opacity: 0.7;
+    }
+
+
+    /* Provider header */
+    .provider-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 4px 18px;
+    }
+
+    .provider-title {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .provider-title-main {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .provider-title-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.38);
+    }
+
+    .provider-status {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 6px 12px;
-      margin-bottom: 20px;
-      border: 1px solid #dbeafe;
+      padding: 7px 10px;
       border-radius: 999px;
-      background: rgba(239, 246, 255, 0.85);
-      color: #2563eb;
-      font-size: 12px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 10px;
       font-weight: 600;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
     }
 
-    .hero-badge-dot {
+    .provider-status-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #3b82f6;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.09);
-    }
-
-    .hero h1 {
-      font-size: clamp(30px, 5vw, 46px);
-      line-height: 1.2;
-      letter-spacing: -1.5px;
-      font-weight: 720;
-      color: #101828;
-      margin-bottom: 15px;
-    }
-
-    .hero-subtitle {
-      max-width: 650px;
-      margin: 0 auto;
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.8;
-    }
-
-    .effective-date {
-      display: inline-flex;
-      margin-top: 22px;
-      padding: 7px 13px;
-      border-radius: 8px;
       background: #fff;
-      border: 1px solid var(--border);
-      color: #667085;
-      font-size: 12px;
+      box-shadow: 0 0 8px rgba(255,255,255,0.75);
     }
 
-    /* 内容卡片 */
-    .policy-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
 
-    .policy-content {
-      padding: 44px 48px;
-    }
-
-    .intro {
-      margin-bottom: 38px;
-      padding: 18px 20px;
-      border-left: 3px solid #60a5fa;
-      border-radius: 0 10px 10px 0;
-      background: #f8fbff;
-      color: #475467;
-      font-size: 14px;
-    }
-
-    .section {
-      padding: 34px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .section:first-of-type {
-      border-top: none;
-      padding-top: 0;
-    }
-
-    .section-title {
+    /* Provider item */
+    .api-item {
+      position: relative;
+      z-index: 2;
       display: flex;
       align-items: center;
-      gap: 13px;
-      margin-bottom: 22px;
+      gap: 17px;
+      min-height: 88px;
+      padding: 15px 16px;
+      margin-bottom: 9px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018));
+      border: 1px solid rgba(255,255,255,0.075);
+      transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .section-number {
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 13px;
+    .api-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .api-item:hover {
+      transform: translateX(5px);
+      background: linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025));
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+
+    /* Provider logos */
+    .api-logo {
+      position: relative;
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 20px rgba(0,0,0,0.35);
+    }
+
+    .api-logo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.13), transparent 42%);
+      pointer-events: none;
+    }
+
+
+    /* OpenAI */
+    .api-logo.openai {
+      background: linear-gradient(145deg, #1a1a1a, #0b0b0b);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+    }
+
+    .api-logo.openai svg {
+      width: 29px;
+      height: 29px;
+    }
+
+    /* Claude */
+    .api-logo.claude {
+      background: linear-gradient(145deg, #23211f, #0f0f0f);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #e5d5c5;
+      font-size: 12px;
+      font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Gemini */
+    .api-logo.gemini {
+      background: linear-gradient(145deg, #171717, #080808);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 19px;
       font-weight: 700;
     }
 
-    .section-title h2 {
-      font-size: 20px;
-      line-height: 1.4;
-      letter-spacing: -0.4px;
-      font-weight: 680;
-      color: #101828;
+    .api-item:nth-of-type(4) .api-logo::before {
+      content: "";
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: conic-gradient(from 180deg, #4285f4, #9b72cb, #ea4335, #fbbc04, #4285f4);
+      opacity: 0.75;
+      filter: blur(8px);
     }
 
-    .section > p {
-      color: #475467;
-      font-size: 14px;
-      margin-bottom: 18px;
+
+    /* Provider info */
+    .api-info {
+      flex: 1;
+      min-width: 0;
     }
 
-    .subsection {
-      margin-top: 24px;
-    }
-
-    .subsection-title {
+    .api-name-row {
       display: flex;
       align-items: center;
       gap: 9px;
-      font-size: 15px;
-      color: #1d2939;
+      margin-bottom: 5px;
+    }
+
+    .api-name {
+      font-size: 16px;
       font-weight: 650;
-      margin-bottom: 10px;
+      letter-spacing: -0.15px;
+      color: #fff;
     }
 
-    .subsection-title::before {
-      content: "";
-      width: 5px;
-      height: 5px;
+    .api-tag {
+      font-size: 11px;
+      color: rgba(255,255,255,0.42);
+      letter-spacing: 0.2px;
+    }
+
+
+    /* Official */
+    .official-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.52);
+    }
+
+    /* Arrow */
+    .api-arrow {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: #60a5fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.25s ease, transform 0.25s ease, background 0.25s ease;
     }
 
-    .subsection p {
-      color: #667085;
-      font-size: 14px;
-      margin-bottom: 8px;
+    .api-item:hover .api-arrow {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      transform: translateX(2px);
     }
 
-    .highlight {
-      margin-top: 24px;
-      padding: 20px;
-      border: 1px solid #bbf7d0;
-      border-radius: 12px;
-      background: var(--green-soft);
+    .api-arrow svg {
+      width: 14px;
+      height: 14px;
     }
 
-    .highlight-title {
+    /* Floating */
+    @keyframes floatCard {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.62), inset 0 1px 0 rgba(255,255,255,0.08);
+      }
+      50% {
+        transform: translateY(-10px);
+        box-shadow: 0 42px 95px rgba(0,0,0,0.78), inset 0 1px 0 rgba(255,255,255,0.10);
+      }
+    }
+
+
+    /* =========================================================
+       FEATURES (WITH SLIDE ANIMATIONS)
+       ========================================================= */
+
+    .features-section {
+      position: relative;
+      z-index: 1;
+      padding: 0 40px 60px;
+      overflow: hidden; /* prevents scrollbar during animation */
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .feature {
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #15803d;
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 7px;
-    }
-
-    .highlight-title svg {
-      width: 17px;
-      height: 17px;
-      flex: none;
-    }
-
-    .highlight p {
-      color: #3f6248;
       font-size: 13px;
-      line-height: 1.8;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 18px;
+      border-radius: 30px;
+      opacity: 0; /* Starts hidden for animation */
     }
 
-    /* 用途列表 */
-    .purpose-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 16px;
+    .feature svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.8;
     }
 
-    .purpose-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 13px;
-      padding: 15px 16px;
-      border: 1px solid #edf0f4;
-      border-radius: 12px;
-      background: #fbfcfe;
-      transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease;
+    /* Slide In Keyframes */
+    @keyframes slideInLeft {
+      0% { opacity: 0; transform: translateX(-60px); }
+      100% { opacity: 1; transform: translateX(0); }
     }
 
-    .purpose-item:hover {
-      transform: translateY(-1px);
-      border-color: #dbeafe;
-      background: #f8fbff;
+    @keyframes slideInRight {
+      0% { opacity: 0; transform: translateX(60px); }
+      100% { opacity: 1; transform: translateX(0); }
     }
 
-    .purpose-icon {
-      flex: 0 0 auto;
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 8px;
-      background: #eff6ff;
-      color: #2563eb;
-      font-size: 13px;
-      font-weight: 700;
+    /* Slide rules applied to specific items */
+    .feature:nth-child(1), 
+    .feature:nth-child(2) {
+      animation: slideInLeft 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
 
-    .purpose-content strong {
-      display: block;
-      color: #344054;
-      font-size: 14px;
-      margin-bottom: 2px;
+    .feature:nth-child(3), 
+    .feature:nth-child(4) {
+      animation: slideInRight 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
 
-    .purpose-content span.text-content {
-      color: #667085;
-      font-size: 13px;
-      line-height: 1.7;
+    /* Staggered delays */
+    .feature:nth-child(1) { animation-delay: 0.1s; }
+    .feature:nth-child(2) { animation-delay: 0.25s; }
+    .feature:nth-child(3) { animation-delay: 0.4s; }
+    .feature:nth-child(4) { animation-delay: 0.55s; }
+
+
+    /* =========================================================
+       HOW IT WORKS (WITH GLOW ANIMATION)
+       ========================================================= */
+
+    .how-it-works-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+      border-top: 1px solid rgba(255,255,255,0.05);
     }
 
-    /* 底部 */
-    .footer-note {
-      margin-top: 28px;
+    .hw-header {
       text-align: center;
-      color: #98a2b3;
-      font-size: 12px;
-      line-height: 1.7;
+      margin-bottom: 60px;
     }
 
-    .back-top {
-      position: fixed;
-      right: 24px;
+    /* Animated Glow Keyframes */
+    @keyframes textGlow {
+      0%, 100% { text-shadow: 0 0 15px rgba(120,150,255,0.4), 0 0 30px rgba(120,150,255,0.2); }
+      50% { text-shadow: 0 0 25px rgba(120,150,255,0.8), 0 0 50px rgba(120,150,255,0.5); }
+    }
+
+    .hw-header h2 {
+      font-size: 38px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      color: #fff;
+      animation: textGlow 2.5s ease-in-out infinite;
+    }
+
+    .hw-header p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .hw-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .hw-steps {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      max-width: 400px;
+    }
+
+    .hw-steps::before {
+      content: "";
+      position: absolute;
+      top: 24px;
       bottom: 24px;
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--border);
+      left: 23px;
+      width: 1px;
+      border-left: 1px dashed rgba(255,255,255,0.2);
+      z-index: 0;
+    }
+
+    .hw-step {
+      display: flex;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-icon {
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.92);
-      color: #667085;
-      cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
+      background: #0f0f11;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-icon svg {
+      width: 20px;
+      height: 20px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .step-content h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+      margin-top: 4px;
+    }
+
+    .step-content p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* =========================================================
+       AGENT SESSION PANEL (UPDATED)
+       ========================================================= */
+
+    .hw-code-panel {
+      flex-shrink: 0;
+      width: 500px;
+      background: #111111;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .agent-header {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      position: relative;
+    }
+
+    .mac-controls { display: flex; gap: 8px; margin-right: auto; }
+    .mac-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .mac-dot.red { background: #FF5F56; }
+    .mac-dot.yellow { background: #FFBD2E; }
+    .mac-dot.green { background: #27C93F; }
+
+    .header-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      letter-spacing: 0.5px;
+    }
+
+    .header-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-bar {
+      width: 40px;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 16.15%;
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+    }
+
+    .agent-body {
+      padding: 10px 20px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .agent-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 16px;
+    }
+
+    .agent-step-icon { color: #b266ff !important; font-size: 10px; }
+    .step-bold { color: #fff; font-weight: 600; }
+    .step-path { color: #4ade80; }
+
+    .diff-container {
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      font-size: 13.5px;
+    }
+
+    .diff-line { display: flex; padding: 2px 0; }
+    .diff-line.add { background: rgba(74, 222, 128, 0.15); }
+    .diff-line.remove { background: rgba(248, 113, 113, 0.15); }
+
+    .diff-num {
+      width: 45px;
+      text-align: right;
+      padding-right: 16px;
+      color: rgba(255,255,255,0.3);
+      user-select: none;
+    }
+
+    .diff-line.add .diff-num { color: #4ade80; }
+    .diff-line.remove .diff-num { color: #f87171; }
+    .diff-code { flex: 1; color: rgba(255,255,255,0.8); white-space: pre; }
+
+    .prompt-ribbon {
+      background: rgba(255,255,255,0.04);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .prompt-chevron { color: #60a5fa; font-weight: bold; }
+
+    .agent-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+    }
+
+    .thinking-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .thinking-icon { color: #b266ff; }
+    .footer-links { display: flex; gap: 16px; color: rgba(255,255,255,0.7); }
+    .footer-links span { cursor: pointer; }
+    .footer-links span:hover { color: #fff; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+
+    /* =========================================================
+       ENTERPRISE SLA (TYPEWRITER CLASSES)
+       ========================================================= */
+
+    .sla-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 40px 60px;
+    }
+
+    .sla-box {
+      background: #0a0a0a;
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 20px;
+      padding: 48px 40px;
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .sla-left { flex: 0 0 280px; }
+    .sla-left h2 { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 16px; color: #fff; }
+    .sla-left p { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.55); margin-bottom: 28px; }
+
+    .btn-learn {
+      display: inline-block;
+      padding: 10px 22px;
+      border: 1px solid rgba(212,175,55,0.6);
+      border-radius: 8px;
+      color: #d4af37;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
       transition: all 0.25s ease;
-      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
     }
 
-    .back-top.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
+    .btn-learn:hover { background: rgba(212,175,55,0.12); border-color: #d4af37; }
+
+    .sla-cards {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 16px;
     }
 
-    .back-top:hover {
-      color: #2563eb;
-      border-color: #bfdbfe;
-      background: #eff6ff;
+    .sla-card {
+      background: rgba(20,20,22,0.7);
+      border: 1px solid rgba(212,175,55,0.18);
+      border-radius: 14px;
+      padding: 22px 20px;
+      transition: border-color 0.25s ease, background 0.25s ease;
     }
 
-    /* 移动端 */
-    @media (max-width: 640px) {
-      .topbar {
-        height: 58px;
-      }
+    .sla-card:hover { border-color: rgba(212,175,55,0.4); background: rgba(25,25,28,0.9); }
 
-      .topbar-inner {
-        width: min(100% - 28px, 900px);
-      }
-
-      .topbar-label {
-        display: none;
-      }
-
-      .page {
-        width: min(100% - 22px, 900px);
-        padding: 48px 0 60px;
-      }
-
-      .hero {
-        margin-bottom: 30px;
-      }
-
-      .hero h1 {
-        font-size: 30px;
-        letter-spacing: -0.8px;
-      }
-
-      .hero-subtitle {
-        font-size: 13px;
-      }
-
-      .policy-card {
-        border-radius: 15px;
-      }
-
-      .policy-content {
-        padding: 28px 20px;
-      }
-
-      .section {
-        padding: 28px 0;
-      }
-
-      .section-title h2 {
-        font-size: 18px;
-      }
-
-      .section-title {
-        gap: 10px;
-      }
-
-      .section-number {
-        width: 31px;
-        height: 31px;
-        border-radius: 8px;
-      }
-
-      .section > p,
-      .subsection p {
-        font-size: 13px;
-      }
-
-      .purpose-item {
-        padding: 13px;
-      }
-
-      .back-top {
-        right: 16px;
-        bottom: 16px;
-      }
+    .sla-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid rgba(212,175,55,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
     }
 
-    /* 页面进入动画 */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(12px);
-      animation: fadeIn 0.6s ease forwards;
+    .sla-icon svg { width: 18px; height: 18px; color: #d4af37; }
+
+    .sla-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+      min-height: 18px; /* prevents layout collapse during typing */
     }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .sla-card p {
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.5);
+      min-height: 40px; /* prevents layout collapse during typing */
     }
 
-    .delay-1 {
-      animation-delay: 0.08s;
+    /* Typewriter Cursor animation */
+    .typing-cursor::after {
+      content: '|';
+      color: #d4af37;
+      animation: blink 0.7s infinite;
+      margin-left: 2px;
     }
 
-    .delay-2 {
-      animation-delay: 0.16s;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
-    .delay-3 {
-      animation-delay: 0.24s;
+
+    /* =========================================================
+       CTA
+       ========================================================= */
+
+    .cta-section {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 80px 40px 100px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .cta-section h2 { font-size: 32px; font-weight: 700; margin-bottom: 14px; color: #fff; }
+    .cta-section p { font-size: 16px; color: rgba(255,255,255,0.55); margin-bottom: 32px; }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #d4af37;
+      color: #000;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-cta:hover {
+      background: #e0c05a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+      .container { gap: 40px; }
+      .right-card { width: 390px; }
+      .hw-container { gap: 35px; }
+      .hw-code-panel { width: 470px; }
+    }
+
+    @media (max-width: 900px) {
+      .container { flex-direction: column; text-align: center; padding: 60px 24px 40px; gap: 50px; }
+      .left-content { max-width: 100%; }
+      h1 { font-size: 36px; }
+      .description { margin-left: auto; margin-right: auto; }
+      .buttons { justify-content: center; }
+      .right-card { width: min(100%,430px); }
+      .provider-header { text-align: left; }
+      .hw-container { flex-direction: column; gap: 40px; }
+      .hw-steps { max-width: 100%; width: 100%; text-align: left; }
+      .hw-code-panel { width: 100%; }
+      .corner-glow { width: 270px; height: 270px; top: -80px; right: -80px; filter: blur(25px); }
+      .light-streak { width: 65vw; height: 1px; }
+      .sla-box { flex-direction: column; padding: 36px 24px; }
+      .sla-left { flex: none; width: 100%; text-align: center; }
+      .sla-cards { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 52px 18px 30px; }
+      h1 { font-size: 31px; }
+      .features { gap: 10px; }
+      .feature { font-size: 12px; padding: 8px 14px; }
+      .hw-header h2 { font-size: 30px; }
+      .how-it-works-section { padding-left: 18px; padding-right: 18px; }
+      .hw-code-panel { border-radius: 12px; }
+      .corner-glow { width: 190px; height: 190px; top: -55px; right: -55px; }
+      .light-streak:nth-of-type(n+7) { display: none; }
+      .right-card { width: 100%; padding: 13px; border-radius: 20px; }
+      .provider-header { padding: 3px 3px 14px; }
+      .provider-title-main { font-size: 10px; }
+      .provider-title-sub { font-size: 10px; }
+      .provider-status { padding: 6px 8px; font-size: 9px; }
+      .api-item { min-height: 76px; padding: 12px; gap: 13px; border-radius: 14px; }
+      .api-logo { width: 46px; height: 46px; border-radius: 12px; }
+      .api-logo.openai svg { width: 25px; height: 25px; }
+      .api-name { font-size: 14px; }
+      .api-tag { font-size: 10px; }
+      .official-badge { display: none; }
+      .api-arrow { width: 26px; height: 26px; }
+      .diff-container { font-size: 12px; }
+      .agent-header { padding: 12px 16px; }
+      .prompt-ribbon { padding: 12px 16px; font-size: 13px; }
+      .sla-section { padding: 30px 18px 40px; }
+      .sla-box { padding: 28px 18px; }
+      .sla-left h2 { font-size: 24px; }
+      .cta-section { padding: 60px 18px 80px; }
+      .cta-section h2 { font-size: 26px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .corner-glow { animation: none; opacity: 0.75; }
+      .light-streak, .right-card { animation: none; }
+      .light-streak { opacity: 0; }
+      .thinking-status, .hw-header h2 { animation: none; }
+      .feature { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+
+    /* THEME ISOLATION... */
+    .anliai-home {
+      --anliai-bg: #000000; --anliai-surface: #0a0a0a; --anliai-surface-2: #111111;
+      --anliai-surface-3: #161616; --anliai-white: #ffffff; --anliai-text: rgba(255,255,255,0.88);
+      --anliai-text-secondary: rgba(255,255,255,0.70); --anliai-text-muted: rgba(255,255,255,0.55);
+      --anliai-text-faint: rgba(255,255,255,0.38); --anliai-border: rgba(255,255,255,0.10);
+      --anliai-border-strong: rgba(255,255,255,0.16); --anliai-gold: #d4af37;
+      position: relative !important; width: 100% !important; min-height: 100vh !important;
+      background: var(--anliai-bg) !important; color: var(--anliai-white) !important;
+      color-scheme: dark !important; isolation: isolate; overflow-x: hidden;
+    }
+    .anliai-home, .anliai-home * { box-sizing: border-box; }
+    .anliai-home h1, .anliai-home h2, .anliai-home h3, .anliai-home p, .anliai-home span, .anliai-home div, .anliai-home a { color: inherit; }
+    .anliai-home h1, .anliai-home h2, .anliai-home h3 { color: #ffffff !important; }
+    .anliai-home { background-color: #000000 !important; }
+    .anliai-home .badge { color: rgba(255,255,255,0.60) !important; background: rgba(255,255,255,0.05) !important; border-color: rgba(255,255,255,0.08) !important; }
+    .anliai-home .subtitle { color: rgba(255,255,255,0.85) !important; }
+    .anliai-home .description { color: rgba(255,255,255,0.55) !important; }
+    .anliai-home .btn-primary { background: #ffffff !important; color: #000000 !important; }
+    .anliai-home .btn-primary svg { color: #000000 !important; }
+    .anliai-home .btn-primary:hover { background: #f0f0f0 !important; color: #000000 !important; }
+    .anliai-home .btn-secondary { background: transparent !important; color: #ffffff !important; border-color: rgba(255,255,255,0.25) !important; }
+    .anliai-home .btn-secondary svg { color: #ffffff !important; }
+    .anliai-home .btn-secondary:hover { background: rgba(255,255,255,0.08) !important; color: #ffffff !important; border-color: rgba(255,255,255,0.40) !important; }
+    .anliai-home .right-card { background: linear-gradient(145deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.025) 38%, rgba(10,10,12,0.92) 100%) !important; border-color: rgba(255,255,255,0.12) !important; color: #ffffff !important; box-shadow: 0 30px 80px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.08) !important; }
+    .anliai-home .provider-title-main { color: rgba(255,255,255,0.88) !important; }
+    .anliai-home .provider-title-sub { color: rgba(255,255,255,0.38) !important; }
+    .anliai-home .provider-status { color: rgba(255,255,255,0.55) !important; background: rgba(255,255,255,0.035) !important; border-color: rgba(255,255,255,0.08) !important; }
+    .anliai-home .provider-status-dot { background: #ffffff !important; }
+    .anliai-home .api-item { color: #ffffff !important; background: linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018)) !important; border-color: rgba(255,255,255,0.075) !important; }
+    .anliai-home .api-item:hover { color: #ffffff !important; background: linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025)) !important; border-color: rgba(255,255,255,0.18) !important; }
+    .anliai-home .api-name { color: #ffffff !important; }
+    .anliai-home .api-tag { color: rgba(255,255,255,0.42) !important; }
+    .anliai-home .official-badge { color: rgba(255,255,255,0.52) !important; background: rgba(255,255,255,0.045) !important; border-color: rgba(255,255,255,0.08) !important; }
+    .anliai-home .api-arrow { color: rgba(255,255,255,0.35) !important; background: rgba(255,255,255,0.035) !important; border-color: rgba(255,255,255,0.06) !important; }
+    .anliai-home .api-item:hover .api-arrow { color: #ffffff !important; background: rgba(255,255,255,0.08) !important; }
+    .anliai-home .feature { color: rgba(255,255,255,0.80) !important; background: rgba(255,255,255,0.03) !important; border-color: rgba(255,255,255,0.10) !important; }
+    .anliai-home .feature svg { color: rgba(255,255,255,0.80) !important; }
+    .anliai-home .how-it-works-section { border-top-color: rgba(255,255,255,0.05) !important; }
+    .anliai-home .hw-header h2 { color: #ffffff !important; }
+    .anliai-home .hw-header p { color: rgba(255,255,255,0.55) !important; }
+    .anliai-home .hw-steps::before { border-left-color: rgba(255,255,255,0.20) !important; }
+    .anliai-home .step-icon { background: #0f0f11 !important; border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.80) !important; }
+    .anliai-home .step-icon svg { color: rgba(255,255,255,0.80) !important; }
+    .anliai-home .step-content h3 { color: #ffffff !important; }
+    .anliai-home .step-content p { color: rgba(255,255,255,0.50) !important; }
+    .anliai-home .hw-code-panel { background: #111111 !important; border-color: rgba(255,255,255,0.08) !important; color: #ffffff !important; box-shadow: 0 24px 80px rgba(0,0,0,0.50) !important; }
+    .anliai-home .agent-header { color: rgba(255,255,255,0.40) !important; }
+    .anliai-home .header-title { color: rgba(255,255,255,0.40) !important; }
+    .anliai-home .header-progress { color: rgba(255,255,255,0.50) !important; }
+    .anliai-home .progress-bar { background: rgba(255,255,255,0.10) !important; }
+    .anliai-home .progress-fill { background: rgba(255,255,255,0.60) !important; }
+    .anliai-home .agent-body { color: rgba(255,255,255,0.80) !important; }
+    .anliai-home .agent-step { color: rgba(255,255,255,0.50) !important; }
+    .anliai-home .step-bold { color: #ffffff !important; }
+    .anliai-home .step-path { color: #4ade80 !important; }
+    .anliai-home .diff-container { background: rgba(0,0,0,0.20) !important; }
+    .anliai-home .diff-line { color: rgba(255,255,255,0.80) !important; }
+    .anliai-home .diff-num { color: rgba(255,255,255,0.30) !important; }
+    .anliai-home .diff-code { color: rgba(255,255,255,0.80) !important; }
+    .anliai-home .diff-line.add { background: rgba(74,222,128,0.15) !important; }
+    .anliai-home .diff-line.remove { background: rgba(248,113,113,0.15) !important; }
+    .anliai-home .diff-line.add .diff-num { color: #4ade80 !important; }
+    .anliai-home .diff-line.remove .diff-num { color: #f87171 !important; }
+    .anliai-home .prompt-ribbon { background: rgba(255,255,255,0.04) !important; border-top-color: rgba(255,255,255,0.03) !important; border-bottom-color: rgba(255,255,255,0.03) !important; color: #ffffff !important; }
+    .anliai-home .prompt-chevron { color: #60a5fa !important; }
+    .anliai-home .agent-footer { color: rgba(255,255,255,0.50) !important; }
+    .anliai-home .thinking-status { color: rgba(255,255,255,0.50) !important; }
+    .anliai-home .thinking-icon { color: #b266ff !important; }
+    .anliai-home .footer-links { color: rgba(255,255,255,0.70) !important; }
+    .anliai-home .footer-links span:hover { color: #ffffff !important; }
+    .anliai-home .sla-section { color: #ffffff !important; }
+    .anliai-home .sla-box { background: #0a0a0a !important; border-color: rgba(212,175,55,0.25) !important; color: #ffffff !important; }
+    .anliai-home .sla-left h2 { color: #ffffff !important; }
+    .anliai-home .sla-left p { color: rgba(255,255,255,0.55) !important; }
+    .anliai-home .btn-learn { color: #d4af37 !important; border-color: rgba(212,175,55,0.60) !important; }
+    .anliai-home .btn-learn:hover { color: #d4af37 !important; background: rgba(212,175,55,0.12) !important; border-color: #d4af37 !important; }
+    .anliai-home .sla-card { background: rgba(20,20,22,0.70) !important; border-color: rgba(212,175,55,0.18) !important; color: #ffffff !important; }
+    .anliai-home .sla-card:hover { background: rgba(25,25,28,0.90) !important; border-color: rgba(212,175,55,0.40) !important; }
+    .anliai-home .sla-icon { background: rgba(212,175,55,0.10) !important; border-color: rgba(212,175,55,0.25) !important; }
+    .anliai-home .sla-icon svg { color: #d4af37 !important; }
+    .anliai-home .sla-card h3 { color: #ffffff !important; }
+    .anliai-home .sla-card p { color: rgba(255,255,255,0.50) !important; }
+    .anliai-home .cta-section { border-top-color: rgba(255,255,255,0.05) !important; }
+    .anliai-home .cta-section h2 { color: #ffffff !important; }
+    .anliai-home .cta-section p { color: rgba(255,255,255,0.55) !important; }
+    .anliai-home .btn-cta { background: #d4af37 !important; color: #000000 !important; }
+    .anliai-home .btn-cta:hover { background: #e0c05a !important; color: #000000 !important; }
+    .anliai-home a { text-decoration: none; }
+    .anliai-home svg { color: inherit !important; }
+    .anliai-home button, .anliai-home input, .anliai-home textarea, .anliai-home select { color-scheme: dark !important; }
+
+    @media (prefers-color-scheme: light) {
+      .anliai-home { background: #000000 !important; color: #ffffff !important; }
+      .anliai-home h1, .anliai-home h2, .anliai-home h3, .anliai-home p, .anliai-home span, .anliai-home div, .anliai-home a { color: inherit; }
+      .anliai-home .api-name, .anliai-home .step-content h3, .anliai-home .sla-left h2, .anliai-home .sla-card h3, .anliai-home .cta-section h2, .anliai-home .hw-header h2 { color: #ffffff !important; }
+      .anliai-home .subtitle { color: rgba(255,255,255,0.85) !important; }
+      .anliai-home .description, .anliai-home .hw-header p, .anliai-home .sla-left p, .anliai-home .cta-section p, .anliai-home .step-content p { color: rgba(255,255,255,0.55) !important; }
+    }
+    @media (max-width: 600px) and (prefers-color-scheme: light) {
+      .anliai-home { background: #000000 !important; color: #ffffff !important; }
+      .anliai-home .right-card { background: linear-gradient(145deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.025) 38%, rgba(10,10,12,0.92) 100%) !important; }
+      .anliai-home .hw-code-panel { background: #111111 !important; }
+      .anliai-home .sla-box { background: #0a0a0a !important; }
     }
   </style>
 </head>
 
 <body>
+<div class="anliai-home">
 
-  <!-- 顶部导航 -->
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a href="#" class="brand">
-        <span class="brand-icon">A</span>
-        <span>Privacy Center</span>
-      </a>
+  <!-- BACKGROUND -->
+  <div class="bg-light">
+    <div class="corner-glow"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+    <div class="light-streak"></div>
+  </div>
 
-      <div style="display: flex; align-items: center;">
-        <span class="topbar-label">
-          <span class="zh">平台隐私保护协议</span>
-          <span class="en">Platform Privacy Policy</span>
-        </span>
-        <button id="langToggle" class="lang-toggle-btn">
-          <strong>中</strong>&nbsp;/&nbsp;EN
-        </button>
+  <!-- HERO -->
+  <div class="container">
+    <div class="left-content">
+      <div class="badge">
+        ENTERPRISE-GRADE AI API PLATFORM
+      </div>
+      <h1>
+        Direct Access to<br>
+        Official OpenAI, Claude<br>
+        & Gemini APIs.
+      </h1>
+      <p class="subtitle">
+        No fraud.No reverse engineering.<br>
+        Just pure, official APIs.
+      </p>
+      <p class="description">
+        We connect directly to the official upstreams of OpenAI,
+        Claude (Anthropic), and Gemini (Google) with enterprise-grade
+        reliability, transparency, and performance.
+      </p>
+      <div class="buttons">
+        <a href="https://zephyr.sbs" class="btn btn-primary">
+          Start Building
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          View Docs
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </a>
       </div>
     </div>
-  </header>
 
-
-  <main class="page">
-
-    <!-- 页面标题 -->
-    <section class="hero fade-in">
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        <span class="zh">隐私与数据保护</span>
-        <span class="en">Privacy & Data Protection</span>
+    <!-- PREMIUM PROVIDER CARD -->
+    <div class="right-card">
+      <div class="provider-header">
+        <div class="provider-title">
+          <div class="provider-title-main">AI Infrastructure</div>
+          <div class="provider-title-sub">Direct access to leading AI providers</div>
+        </div>
+        <div class="provider-status">
+          <span class="provider-status-dot"></span>
+          Operational
+        </div>
       </div>
 
-      <h1>
-        <span class="zh">平台隐私保护协议</span>
-        <span class="en">Platform Privacy Policy</span>
-      </h1>
-
-      <p class="hero-subtitle">
-        <span class="zh">我们重视您的个人数据与隐私，并致力于以透明、最小化和负责任的方式处理您的信息。</span>
-        <span class="en">We value your personal data and privacy, and are committed to processing your information in a transparent, minimized, and responsible manner.</span>
-      </p>
-
-      <div class="effective-date">
-        <span class="zh">生效日期：</span>
-        <span class="en">Effective Date: </span>
-        <strong style="margin-left: 4px;">[08/8/26]</strong>
+      <!-- OpenAI -->
+      <div class="api-item">
+        <div class="api-logo openai">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.1412.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3834-1.9806V11.6a.7663.7663 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.1412-.0852-4.783-2.7626a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+          </svg>
+        </div>
+        <div class="api-info">
+          <div class="api-name-row">
+            <div class="api-name">OpenAI</div>
+            <span class="official-badge">Official</span>
+          </div>
+          <div class="api-tag">GPT models · Direct API connection</div>
+        </div>
+        <div class="api-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>
+          </svg>
+        </div>
       </div>
-    </section>
+
+      <!-- Claude -->
+      <div class="api-item">
+        <div class="api-logo claude">Claude</div>
+        <div class="api-info">
+          <div class="api-name-row">
+            <div class="api-name">Claude</div>
+            <span class="official-badge">Official</span>
+          </div>
+          <div class="api-tag">Anthropic models · Direct API connection</div>
+        </div>
+        <div class="api-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Gemini -->
+      <div class="api-item">
+        <div class="api-logo gemini">G</div>
+        <div class="api-info">
+          <div class="api-name-row">
+            <div class="api-name">Gemini</div>
+            <span class="official-badge">Official</span>
+          </div>
+          <div class="api-tag">Google models · Direct API connection</div>
+        </div>
+        <div class="api-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
 
-    <!-- 政策正文 -->
-    <article class="policy-card fade-in delay-1">
-      <div class="policy-content">
+  <!-- FEATURES (With Slide Animations) -->
+  <div class="features-section">
+    <div class="features">
+      
+      <!-- Slide in Left -->
+      <div class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Official Upstreams
+      </div>
 
-        <div class="intro">
-            <span class="zh">数据安全对您至关重要，我们也深知自身责任。本协议向您公开，在您运行本平台 API 代理及计费系统时，我们将如何合规地收集、使用并保护您的数据。请在完成注册或启用服务前，务必审慎阅读并充分理解以下条款。</span>
-            <span class="en">Data security is crucial to you, and we fully understand our responsibility. This agreement discloses how we will compliantly collect, use, and protect your data when you run this platform's API proxy and billing system. Please carefully read and fully understand the following terms before completing registration or enabling the service.</span>
+      <div class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+        </svg>
+        No fraud
+      </div>
+
+      <!-- Slide in Right -->
+      <div class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        99.9% Uptime
+      </div>
+
+      <div class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        Global Acceleration
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- HOW IT WORKS (With Glow Animation) -->
+  <section class="how-it-works-section">
+    <div class="hw-header">
+      <h2>How it works</h2>
+      <p>Get started in minutes. Scale to millions.</p>
+    </div>
+
+    <div class="hw-container">
+      <div class="hw-steps">
+        <div class="hw-step">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>1. Sign Up</h3>
+            <p>Create your account and get your API key instantly.</p>
+          </div>
+        </div>
+        <div class="hw-step">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>2. Choose Model</h3>
+            <p>Select from OpenAI, Claude, or Gemini in the Model Hub.</p>
+          </div>
+        </div>
+        <div class="hw-step">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>3. Make API Calls</h3>
+            <p>Integrate using our OpenAI-compatible endpoints.</p>
+          </div>
+        </div>
+        <div class="hw-step">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>4. Scale & Monitor</h3>
+            <p>Track usage, view analytics, and scale with confidence.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENT SESSION LOG -->
+      <div class="hw-code-panel">
+        <div class="agent-header">
+          <div class="mac-controls">
+            <div class="mac-dot red"></div>
+            <div class="mac-dot yellow"></div>
+            <div class="mac-dot green"></div>
+          </div>
+          <div class="header-title">projects/main</div>
+          <div class="header-progress">
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <span>16.15%</span>
+          </div>
         </div>
 
-
-        <!-- 第一条 -->
-        <section class="section">
-
-          <div class="section-title">
-            <span class="section-number">01</span>
-            <h2>
-              <span class="zh">平台获取的数据范畴</span>
-              <span class="en">Scope of Data Collected by the Platform</span>
-            </h2>
+        <div class="agent-body">
+          <div class="agent-step">
+            <span class="agent-step-icon">◆</span><span>Thought for 4.1s</span>
+          </div>
+          <div class="agent-step">
+            <span class="agent-step-icon">◆</span><span><span class="step-bold">Edit</span> <span class="step-path">src/middleware/auth.ts</span></span>
           </div>
 
-          <p>
-            <span class="zh">我们将以“最小化必要”为原则，收集维持服务正常运转所需的基础信息。</span>
-            <span class="en">Based on the principle of "data minimization", we will collect the basic information necessary to maintain the normal operation of our services.</span>
-          </p>
-
-
-          <div class="subsection">
-            <div class="subsection-title">
-              <span class="zh">由您直接提交的资料</span>
-              <span class="en">Information Submitted Directly by You</span>
-            </div>
-
-            <p>
-              <strong>
-                <span class="zh">身份凭证：</span>
-                <span class="en">Identity Credentials: </span>
-              </strong>
-              <span class="zh">当您注册时，我们需要获取您的电子邮箱以及您设置的密码（平台无法知晓明文）。若您选择通过 GitHub、Discord 等第三方生态快捷登录，我们将获取该平台的标准授权确认信息。</span>
-              <span class="en">When you register, we need your email address and the password you set (the platform cannot access the plaintext). If you choose to log in via third-party ecosystems like GitHub or Discord, we will obtain standard authorization confirmation from that platform.</span>
-            </p>
-
-            <p>
-              <strong>
-                <span class="zh">交易核对信息：</span>
-                <span class="en">Transaction Verification Info: </span>
-              </strong>
-              <span class="zh">在您为账户充值时，我们会记录生成的内部订单号及到账状态，以便为您准确计算可用额度和处理账务问题。</span>
-              <span class="en">When topping up your account, we record the generated internal order numbers and payment statuses to accurately calculate your available quota and process billing issues.</span>
-            </p>
+          <div class="diff-container">
+            <div class="diff-line"><span class="diff-num">42</span><span class="diff-code">export async function handler(req) {</span></div>
+            <div class="diff-line add"><span class="diff-num">43</span><span class="diff-code">  const token = extractBearer(req);</span></div>
+            <div class="diff-line add"><span class="diff-num">44</span><span class="diff-code">  if (!token) return unauthorized();</span></div>
+            <div class="diff-line remove"><span class="diff-num">47</span><span class="diff-code">  const session = await getSession(req);</span></div>
+            <div class="diff-line add"><span class="diff-num">48</span><span class="diff-code">  req.user = payload;</span></div>
           </div>
+        </div>
 
+        <div class="prompt-ribbon">
+          <span class="prompt-chevron">❯</span><span>Add rate limiting to all API routes.</span>
+        </div>
 
-          <div class="subsection">
-            <div class="subsection-title">
-              <span class="zh">系统运行中自动产生的数据</span>
-              <span class="en">Data Automatically Generated During System Operation</span>
-            </div>
-
-            <p>
-              <strong>
-                <span class="zh">通信与设备特征：</span>
-                <span class="en">Communication & Device Features: </span>
-              </strong>
-              <span class="zh">为确保界面的最佳渲染效果及防范异常登录，我们会捕捉您的 IP 地址、操作系统版本、浏览器类型及界面语言偏好。</span>
-              <span class="en">To ensure the best rendering effect of the interface and prevent abnormal logins, we capture your IP address, OS version, browser type, and UI language preference.</span>
-            </p>
-
-            <p>
-              <strong>
-                <span class="zh">API 调度轨迹：</span>
-                <span class="en">API Call Trajectories: </span>
-              </strong>
-              <span class="zh">平台系统会客观记录您的调用行为元数据，包括但不限于请求发生的时间戳、目标模型名称、Token 的消耗数值以及服务器响应状态码。这些数据是为您提供透明账单和排查技术故障的核心依据。</span>
-              <span class="en">The platform system objectively records the metadata of your call behavior, including but not limited to the request timestamp, target model name, Token consumption, and server response status code. This data is the core basis for providing transparent billing and troubleshooting technical faults.</span>
-            </p>
+        <div class="agent-footer">
+          <div class="thinking-status">
+            <span class="thinking-icon">⠧</span><span>Thinking...<br><span style="color: #fff; font-size: 15px;">Build</span></span>
           </div>
+          <div class="footer-links"><span>Explore →</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
-          <!-- 特别承诺 -->
-          <div class="highlight">
-            <div class="highlight-title">
-              <svg viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2"
-                   stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4z"/>
-                <path d="M9 12l2 2 4-4"/>
-              </svg>
-              <span class="zh">特别承诺：我们绝对不触碰的数据</span>
-              <span class="en">Special Commitment: Data We Absolutely Do Not Touch</span>
-            </div>
+  <!-- ENTERPRISE SLA (With Fast Typewriter Effect) -->
+  <section class="sla-section">
+    <div class="sla-box">
+      <div class="sla-left">
+        <h2>Enterprise SLA<br>& Optimization</h2>
+        <p>Built for mission-critical workloads with global optimization.</p>
+        <a href="#" class="btn-learn">Learn More</a>
+      </div>
 
-            <p>
-              <span class="zh">本平台扮演纯粹的“数据传输通道”角色。您向大语言模型发送的任何提示词（Prompt）文本，以及模型生成并返回给您的所有内容（Completion），仅仅在我们的中转内存中短暂经过。平台绝不进行任何形式的日志留存、缓存或持久化记录。</span>
-              <span class="en">This platform acts purely as a "data transmission channel". Any prompt text you send to the large language model, and all completion content generated and returned to you by the model, only briefly pass through our transit memory. The platform never conducts any form of log retention, caching, or persistent recording.</span>
-            </p>
+      <div class="sla-cards">
+        
+        <div class="sla-card">
+          <div class="sla-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
           </div>
+          <h3>99.9% Uptime SLA</h3>
+          <p>Enterprise-grade reliability with real-time monitoring and alerting.</p>
+        </div>
 
-        </section>
-
-
-        <!-- 第二条 -->
-        <section class="section">
-
-          <div class="section-title">
-            <span class="section-number">02</span>
-            <h2>
-              <span class="zh">数据处理的核心诉求</span>
-              <span class="en">Core Purposes of Data Processing</span>
-            </h2>
+        <div class="sla-card">
+          <div class="sla-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
           </div>
+          <h3>Global Acceleration</h3>
+          <p>Smart routing to the fastest, most stable nodes worldwide.</p>
+        </div>
 
-          <p>
-            <span class="zh">我们向您获取的上述有限信息，其唯一目的是为了履行我们对您的服务承诺，具体场景包括：</span>
-            <span class="en">The sole purpose of obtaining the limited information above is to fulfill our service commitment to you, specific scenarios include:</span>
-          </p>
-
-
-          <div class="purpose-list">
-
-            <div class="purpose-item">
-              <div class="purpose-icon">01</div>
-              <div class="purpose-content">
-                <strong>
-                  <span class="zh">驱动核心业务</span>
-                  <span class="en">Drive Core Business</span>
-                </strong>
-                <span class="text-content">
-                  <span class="zh">识别您的账户身份，完成 API 路由调度，以及精确执行额度的扣减。</span>
-                  <span class="en">Identify your account identity, complete API routing dispatch, and accurately execute quota deduction.</span>
-                </span>
-              </div>
-            </div>
-
-
-            <div class="purpose-item">
-              <div class="purpose-icon">02</div>
-              <div class="purpose-content">
-                <strong>
-                  <span class="zh">维护网络安全</span>
-                  <span class="en">Maintain Network Security</span>
-                </strong>
-                <span class="text-content">
-                  <span class="zh">依托访问轨迹和 IP 识别潜在的 DDoS 攻击、撞库风险、恶意刷单等违规行为。</span>
-                  <span class="en">Rely on access trajectories and IPs to identify potential DDoS attacks, credential stuffing risks, malicious brushing, and other violations.</span>
-                </span>
-              </div>
-            </div>
-
-
-            <div class="purpose-item">
-              <div class="purpose-icon">03</div>
-              <div class="purpose-content">
-                <strong>
-                  <span class="zh">服务迭代与沟通</span>
-                  <span class="en">Service Iteration & Communication</span>
-                </strong>
-                <span class="text-content">
-                  <span class="zh">根据整体的宏观调用频次优化服务器部署；在您额度告警、系统重大升级或您主动发起客诉时，能及时与您取得联系。</span>
-                  <span class="en">Optimize server deployment based on overall macro call frequencies; promptly contact you when your quota alerts, major system upgrades occur, or you actively initiate customer support requests.</span>
-                </span>
-              </div>
-            </div>
-
-
-            <div class="purpose-item">
-              <div class="purpose-icon">04</div>
-              <div class="purpose-content">
-                <strong>
-                  <span class="zh">严禁越界使用</span>
-                  <span class="en">Strict Prohibition of Out-of-Bounds Use</span>
-                </strong>
-                <span class="text-content">
-                  <span class="zh">我们郑重承诺，绝不利用您的任何资料进行用户商业画像，绝不将您的数据投入任何广告变现或营销用途。</span>
-                  <span class="en">We solemnly promise never to use any of your data for commercial user profiling, and never to put your data into any advertising monetization or marketing purposes.</span>
-                </span>
-              </div>
-            </div>
-
+        <div class="sla-card">
+          <div class="sla-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
           </div>
+          <h3>Priority Capacity</h3>
+          <p>Dedicated capacity allocation for mission-critical workloads.</p>
+        </div>
 
-        </section>
-
-
-        <!-- 第三条 -->
-        <section class="section">
-
-          <div class="section-title">
-            <span class="section-number">03</span>
-            <h2>
-              <span class="zh">数据的外部流转与边界</span>
-              <span class="en">External Circulation and Boundaries of Data</span>
-            </h2>
+        <div class="sla-card">
+          <div class="sla-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
           </div>
-
-          <p>
-            <span class="zh">为了提供完整的服务体验，部分数据需要在特定范围内进行必要的流转：</span>
-            <span class="en">To provide a complete service experience, some data needs to be circulated within a specific scope:</span>
-          </p>
-
-
-          <div class="subsection">
-            <div class="subsection-title">
-              <span class="zh">人工智能底层供应商</span>
-              <span class="en">Underlying Artificial Intelligence Suppliers</span>
-            </div>
-
-            <p>
-              <span class="zh">您的对话请求必须通过网络发送至您所选定的上游 AI 实验室（例如 OpenAI、Google 等机构）。请知悉，这些实际处理您请求的机构将受其自身的隐私条款约束，我们建议您在使用特定模型前审阅其官方协议。</span>
-              <span class="en">Your dialogue requests must be sent via the network to your selected upstream AI laboratories (e.g., OpenAI, Google). Please note that these institutions that actually process your requests will be bound by their own privacy policies. We recommend that you review their official agreements before using specific models.</span>
-            </p>
-          </div>
-
-
-          <div class="subsection">
-            <div class="subsection-title">
-              <span class="zh">金融级支付网关</span>
-              <span class="en">Financial-Grade Payment Gateways</span>
-            </div>
-
-            <p>
-              <span class="zh">您的支付动作（如输入信用卡号或验证码）将在持有专业牌照的第三方支付服务商的环境中闭环完成。本平台不参与该环节，也不截留任何敏感的支付渠道账号信息。</span>
-              <span class="en">Your payment actions (such as entering credit card numbers or verification codes) will be completed in a closed loop within the environment of third-party payment service providers holding professional licenses. This platform does not participate in this process, nor does it intercept any sensitive payment channel account information.</span>
-            </p>
-          </div>
-
-
-          <div class="subsection">
-            <div class="subsection-title">
-              <span class="zh">公权力与法定义务</span>
-              <span class="en">Public Authority and Legal Obligations</span>
-            </div>
-
-            <p>
-              <span class="zh">除非面临具备法律效力的司法调查令、国家强制性法规要求，或为了遏制极其严重的网络安全威胁，我们绝不向任何外部机构泄露、出借或变卖您的档案。</span>
-              <span class="en">Unless faced with a legally binding judicial investigation warrant, compulsory national legal requirements, or to curb extremely serious network security threats, we will never leak, lend, or sell your files to any external institutions.</span>
-            </p>
-          </div>
-
-        </section>
+          <h3>Real-time Monitoring</h3>
+          <p>In-depth analytics, usage insights, and performance metrics.</p>
+        </div>
 
       </div>
-    </article>
-
-
-    <div class="footer-note fade-in delay-2">
-      <span class="zh">本页面用于说明平台的数据处理与隐私保护原则。如实际业务发生变化，请及时同步更新本协议内容。</span>
-      <span class="en">This page is used to explain the platform's data processing and privacy protection principles. If actual business changes, please update the content of this agreement synchronously.</span>
     </div>
-
-  </main>
-
-
-  <!-- 返回顶部 -->
-  <button class="back-top" id="backTop" aria-label="返回顶部">
-    <svg width="18" height="18" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round"
-         stroke-linejoin="round">
-      <path d="M18 15l-6-6-6 6"/>
-    </svg>
-  </button>
+  </section>
 
 
-  <script>
-    const backTop = document.getElementById("backTop");
-    const langBtn = document.getElementById("langToggle");
-    const htmlLang = document.documentElement;
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Ready to build with the best AI APIs?</h2>
+    <p>Join thousands of developers building the future.</p>
+    <a href="#" class="btn-cta">Get Started Now →</a>
+  </section>
 
-    // 中英文切换逻辑
-    langBtn.addEventListener("click", () => {
-      document.body.classList.toggle("en-mode");
-      if (document.body.classList.contains("en-mode")) {
-        langBtn.innerHTML = "中&nbsp;/&nbsp;<strong>EN</strong>";
-        htmlLang.setAttribute("lang", "en");
-      } else {
-        langBtn.innerHTML = "<strong>中</strong>&nbsp;/&nbsp;EN";
-        htmlLang.setAttribute("lang", "zh-CN");
-      }
-    });
+</div>
 
-    // 页面滚动后显示返回顶部按钮
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 400) {
-        backTop.classList.add("show");
-      } else {
-        backTop.classList.remove("show");
-      }
-    });
+<!-- Typewriter JS Engine -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Only execute if reduced motion is not preferred
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(prefersReducedMotion) return;
 
-    // 返回顶部
-    backTop.addEventListener("click", () => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          if (!el.dataset.typed) {
+            el.dataset.typed = "true";
+            const text = el.dataset.origText;
+            el.textContent = "";
+            el.classList.add("typing-cursor");
+
+            let i = 0;
+            // Fastest possible typewriter loop (using ~10ms delay)
+            function type() {
+              if (i < text.length) {
+                el.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, 10);
+              } else {
+                el.classList.remove("typing-cursor");
+              }
+            }
+            // Small delay before starting to make it look smooth upon scroll
+            setTimeout(type, 150);
+          }
+        }
       });
-    });
+    }, { threshold: 0.25 }); // Trigger when 25% of the element is visible
 
-    // 防止品牌按钮点击产生跳转
-    document.querySelector(".brand").addEventListener("click", (event) => {
-      event.preventDefault();
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+    // Select text elements inside the SLA Cards to apply the typewriter effect
+    const typeElements = document.querySelectorAll('.sla-card h3, .sla-card p');
+    typeElements.forEach(el => {
+      el.dataset.origText = el.textContent.trim();
+      el.textContent = ''; // Hide text initially
+      observer.observe(el);
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>
